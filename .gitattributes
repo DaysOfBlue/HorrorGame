@@ -13,3 +13,4 @@ Unity.XR.Interaction.Toolkit.Samples.Hands.Editor.csproj filter=lfs diff=lfs mer
 Unity.XR.Hands.Samples.VisualizerSample.csproj filter=lfs diff=lfs merge=lfs -text
 Unity.XR.Interaction.Toolkit.Samples.Hands.csproj filter=lfs diff=lfs merge=lfs -text
 UserSettings filter=lfs diff=lfs merge=lfs -text
+/Assets/TheHereticDigitalHuman filter=lfs diff=lfs merge=lfs -text
