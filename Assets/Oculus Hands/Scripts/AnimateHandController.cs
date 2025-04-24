@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,6 +26,7 @@ public class AnimateHandController : MonoBehaviour
     {
         _gripValue = gripInputActionReference.action.ReadValue<float>();
         _handAnimator.SetFloat("Grip", _gripValue);
+        //UnityEngine.Debug.Log(_gripValue);
     }
 
     private void AnimateTrigger()
