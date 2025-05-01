@@ -27,6 +27,9 @@
 # Ship Asset 
 /[Aa]ssets/Ultimate_Ship/
 
+# Dungeon Asset 
+/[Aa]ssets/Dungeon_Environment/
+
 # Visual Studio cache directory
 .vs/
 
