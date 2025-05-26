@@ -5,6 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class GrabbableObject : MonoBehaviour
 {
+    public Color objectColor;
     private XRGrabInteractable grabInteractable;
     private Renderer objectRenderer;
 
@@ -23,7 +24,7 @@ public class GrabbableObject : MonoBehaviour
     {
         // 물체가 잡혔을 때 실행
         Debug.Log("Object Grabbed!");
-        objectRenderer.material.color = Color.green; // 색상 변경 예시
+        objectRenderer.material.color = objectColor; // 색상 변경 예시
     }
 
     private void OnRelease(SelectExitEventArgs args)
