@@ -1,10 +1,10 @@
 using UnityEngine;
-
+using UnityEngine.AI;
 public class Monster : MonoBehaviour
 {
     [Header("Monster Properties")]
     public int maxHealth = 100;
-
+    public float moveSpeed = 1.0f;
 
     [Header("Sound Settings")] 
     public AudioClip growlSound;
@@ -15,10 +15,13 @@ public class Monster : MonoBehaviour
 
     private GameObject _player;
     private float _distFromPlayer;
+    
+    private NavMeshAgent _agent;
 
     void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
+        _agent = GetComponent<NavMeshAgent>();
         
         _player = GameObject.Find("PlayerOVR");
         if (_player != null)
@@ -52,6 +55,15 @@ public class Monster : MonoBehaviour
         {
             growlTimer += Time.deltaTime;
         }
+
+        if (_player == null)
+        {
+            _player = GameObject.Find("Player");
+        }
+         else if (_player != null)
+         {
+             _agent.SetDestination(_player.transform.position);
+         }
     }
 
     void MakeGrowlSound()
