@@ -45,7 +45,7 @@ public class Monster : MonoBehaviour
     {
         if (growlTimer >= growlRate)
         {
-            MakeGrowlSound();
+            //MakeGrowlSound();
             growlTimer = 0.0f;
         }
         else
