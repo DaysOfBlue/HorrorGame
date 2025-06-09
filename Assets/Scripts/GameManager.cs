@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         GameObject player = Instantiate(playerPrefab,startPoint.position, Quaternion.identity);
+        player.name = "Player";
     }
 
     // Update is called once per frame
