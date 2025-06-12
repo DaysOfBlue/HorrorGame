@@ -20,5 +20,11 @@ namespace Bhaptics.SDK2
         public const string TEST = "test";
         
         public const string TEST2 = "test2";
+        
+        public const string GROWLING = "growling";
+        
+        public const string GROWLING_LEFT = "growling_left";
+        
+        public const string GROWLING_RIGHT = "growling_right";
     }
 }
