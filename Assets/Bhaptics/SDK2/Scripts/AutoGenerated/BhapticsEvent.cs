@@ -26,5 +26,7 @@ namespace Bhaptics.SDK2
         public const string GROWLING_LEFT = "growling_left";
         
         public const string GROWLING_RIGHT = "growling_right";
+        
+        public const string FOOTSTEP = "footstep";
     }
 }
