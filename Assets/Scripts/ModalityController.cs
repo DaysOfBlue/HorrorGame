@@ -31,7 +31,7 @@ public class ModalityController : MonoBehaviour
 
     public void ToggleHaptics(bool isOn)
     {
-        // Implement vibration toggle logic here
+        HapticFeedbackManager.Instance.SetHapticFeedbackActive(isOn);
     }
 
     public void ToggleVisuals(bool isOn)
