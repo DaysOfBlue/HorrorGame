@@ -1,29 +1,38 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Audio;
+
 public class Monster : MonoBehaviour
 {
     [Header("Monster Properties")]
     public int maxHealth = 100;
     public float moveSpeed = 1.0f;
+    public float speedWhenSeen = 5f;
+    public float speedWhenUnSeen = 2f;
+    public float sightThreshold = 0.7f;
+    public Transform playerSight;
+    public float animSmoothTime = 0.1f;
 
-    [Header("Sound Settings")] 
+    [Header("Sound Settings")]
+    public AudioSource audioFootsteps;
+    public AudioSource audioVocal;
     public AudioClip growlSound;
-    public AudioClip stepSound;
+    public AudioClip[] stepSounds;
     public float growlRate = 1.0f;
     private float growlTimer = 0.0f;
-    private AudioSource _audioSource;
 
     private GameObject _player;
     private float _distFromPlayer;
     
     private NavMeshAgent _agent;
+    private Animator _animator;
 
     void Awake()
     {
-        _audioSource = GetComponent<AudioSource>();
         _agent = GetComponent<NavMeshAgent>();
-        
-        _player = GameObject.Find("PlayerOVR");
+        _animator = GetComponent<Animator>();
+
+        _player = GameObject.FindGameObjectWithTag("Player");
         if (_player != null)
         {
             Debug.Log("Object Found! : " + _player.name);
@@ -46,9 +55,15 @@ public class Monster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_player == null) return;
+        Vector3 toEnemy = (transform.position - _player.transform.position).normalized;
+        float dot = Vector3.Dot(playerSight.forward, toEnemy);
+        
+
+
         if (growlTimer >= growlRate)
         {
-            //MakeGrowlSound();
+            MakeGrowlSound();
             growlTimer = 0.0f;
         }
         else
@@ -56,14 +71,21 @@ public class Monster : MonoBehaviour
             growlTimer += Time.deltaTime;
         }
 
-        if (_player == null)
+        if (dot > sightThreshold)
         {
-            _player = GameObject.Find("Player");
+            _agent.speed = speedWhenSeen;
         }
-         else if (_player != null)
-         {
-             _agent.SetDestination(_player.transform.position);
-         }
+        else
+        {
+            _agent.speed = speedWhenUnSeen;
+        }
+
+        _agent.SetDestination(_player.transform.position);
+
+        float currentSpeed = _agent.velocity.magnitude;
+        _animator.SetFloat("Speed", currentSpeed, animSmoothTime, Time.deltaTime);
+        _animator.SetBool("IsRunning", currentSpeed > 0.1f);
+
     }
 
     void MakeGrowlSound()
@@ -72,7 +94,15 @@ public class Monster : MonoBehaviour
         //_audioSource.clip = growlSound;
         _distFromPlayer = Vector3.Distance(gameObject.transform.position, _player.transform.position);
         float volumeRatio = 1 - Mathf.InverseLerp(1, 100, _distFromPlayer);
-        _audioSource.volume = Mathf.Clamp01(volumeRatio);
-        _audioSource.PlayOneShot(growlSound);
+        audioVocal.volume = Mathf.Clamp01(volumeRatio);
+        audioVocal.PlayOneShot(growlSound);
+    }
+
+    public void PlayFootstep()
+    {
+        if (stepSounds.Length == 0 || audioFootsteps == null) return;
+
+        int index = Random.Range(0, stepSounds.Length);
+        audioFootsteps.PlayOneShot(stepSounds[index]);
     }
 }

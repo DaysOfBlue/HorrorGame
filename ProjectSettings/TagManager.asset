@@ -6,11 +6,16 @@ TagManager:
   tags:
   - QDSUIBackplateGradient
   - SamplesInfoPanel
+  - AcousticZone1
+  - AcousticZone2
+  - AcousticZone3
+  - AcousticZone4
+  - AcousticZone5
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - 

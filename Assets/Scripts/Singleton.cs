@@ -10,7 +10,7 @@ public class Singleton <T> : MonoBehaviour where T: Component
         {
             if(_instance == null) // 새로운 인스턴스를 초기화하기 전 다른 인스턴스가 있는지 확인
             {
-                _instance = FindObjectOfType<T>(); // 지정된 타입의 첫 번째로 로드된 오브젝트 검색
+                _instance = Object.FindFirstObjectByType<T>(); // 지정된 타입의 첫 번째로 로드된 오브젝트 검색
                 if(_instance == null) // 만약 없다면, 새로은 게임 오브젝트 생성
                 {
                     GameObject obj = new GameObject();
