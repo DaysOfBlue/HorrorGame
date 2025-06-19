@@ -12,6 +12,10 @@ public class GameManager : Singleton<GameManager>
     int itemCnt = 0;
 
     private int preIdx = 0;
+    
+    private AudioSource _audioSource;
+
+    public AudioClip gameClear;
     // Change progress by calling this method.
 
     void SpawnItem()
@@ -50,11 +54,16 @@ public class GameManager : Singleton<GameManager>
         itemCnt += input;
         Debug.Log("Item Counts : " + itemCnt);
         SpawnItem();
+        if (itemCnt >= 8)
+        {
+            _audioSource.PlayOneShot(gameClear);
+        }
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         SpawnItem();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -68,6 +77,11 @@ public class GameManager : Singleton<GameManager>
         else
         {
             shootTimer += Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            AddItemCount(1);
         }
     }
 
