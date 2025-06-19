@@ -4,7 +4,11 @@ public class RoomAcousticManager : MonoBehaviour
 {
 
     public GameObject roomAcoustics;
-    public MetaXRAudioRoomAcousticProperties _roomScript;
+    private MetaXRAudioRoomAcousticProperties _roomScript;
+
+    public Vector3 position;
+    public Vector3 scale;
+
     void Awake()
     {
         _roomScript = roomAcoustics.GetComponent<MetaXRAudioRoomAcousticProperties>();
@@ -15,24 +19,10 @@ public class RoomAcousticManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("trigger on");
-        Debug.Log(other.name + "/" + other.tag);
-        switch (other.tag)
+        
+        if(other.CompareTag("Player"))
         {
-            case "AcousticZone1":
-                ApplyRoomChange(new Vector3(23.77155f, -3.414309f, 9.712563f), new Vector3(54f, 3f, 4f));
-                break;
-            case "AcousticZone2":
-                ApplyRoomChange(new Vector3(-1.34f, -3.414309f, 4.93f), new Vector3(4f, 3f, 13f));
-                break;
-            case "AcousticZone3":
-                ApplyRoomChange(new Vector3(-31.34f, -3.414309f, 0.14f), new Vector3(63f, 3f, 4f));
-                break;
-            case "AcousticZone4":
-                ApplyRoomChange(new Vector3(-61.2f, -3.414309f, -29.1f), new Vector3(4f, 3f, 63f));
-                break;
-            case "AcousticZone5":
-                ApplyRoomChange(new Vector3(-90.7f, -3.414309f, -59f), new Vector3(63f, 3f, 4f));
-                break;
+            ApplyRoomChange(position, scale);
         }
     }
 
