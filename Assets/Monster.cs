@@ -10,7 +10,7 @@ public class Monster : MonoBehaviour
     public float speedWhenSeen = 5f;
     public float speedWhenUnSeen = 2f;
     public float sightThreshold = 0.7f;
-    public Transform playerSight;
+    public GameObject playerSight;
     public float animSmoothTime = 0.1f;
 
     [Header("Sound Settings")]
@@ -33,6 +33,7 @@ public class Monster : MonoBehaviour
         _animator = GetComponent<Animator>();
 
         _player = GameObject.FindGameObjectWithTag("Player");
+        playerSight = GameObject.Find("CenterEyeAnchor");
         if (_player != null)
         {
             Debug.Log("Object Found! : " + _player.name);
@@ -57,7 +58,7 @@ public class Monster : MonoBehaviour
     {
         if (_player == null) return;
         Vector3 toEnemy = (transform.position - _player.transform.position).normalized;
-        float dot = Vector3.Dot(playerSight.forward, toEnemy);
+        float dot = Vector3.Dot(playerSight.transform.forward, toEnemy);
         
 
 
@@ -86,6 +87,11 @@ public class Monster : MonoBehaviour
         _animator.SetFloat("Speed", currentSpeed, animSmoothTime, Time.deltaTime);
         _animator.SetBool("IsRunning", currentSpeed > 0.1f);
 
+    }
+
+    public void SD()
+    {
+        _agent.SetDestination(_player.transform.position);
     }
 
     void MakeGrowlSound()

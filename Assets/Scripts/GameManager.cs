@@ -1,61 +1,59 @@
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    public enum Progress
-    {
-        Tutorial, // Tutorial
-        First, // First puzzle, until clear
-        Second, // Second puzzle
-        Third, // Third puzzle
-        Last // End
-    }
-    public Transform startPoint;
-    public GameObject playerPrefab;
-    private Progress _progress = Progress.Tutorial;
+    public GameObject itemPrefab;
+    public GameObject monsterPrefab;
+    public Transform[] itemSpawnPoints;
+    int itemCnt = 0;
 
+    private int preIdx = 0;
     // Change progress by calling this method.
-    public void SetProgress(Progress newProgress)
+
+    void SpawnItem()
     {
-        _progress = newProgress;
+        int idx = Random.Range(0, itemSpawnPoints.Length);
+        if (preIdx == idx)
+        {
+            idx += 1;
+            idx = idx % itemSpawnPoints.Length;
+        }
+        GameObject item = Instantiate(itemPrefab, itemSpawnPoints[idx].position, Quaternion.identity);
+        preIdx = idx;
+        
+        if (itemCnt == 2 || itemCnt == 4 || itemCnt == 6)
+        {
+            idx = Random.Range(0, itemSpawnPoints.Length);
+            if (preIdx == idx)
+            {
+                idx += 1;
+                idx = idx % itemSpawnPoints.Length;
+            }
+            GameObject monster = Instantiate(monsterPrefab, itemSpawnPoints[idx].position, Quaternion.identity);
+            monster.GetComponent<Monster>().SD();
+        }
     }
-    
+
+    public void AddItemCount(int input)
+    {
+        itemCnt += input;
+        Debug.Log("Item Counts : " + itemCnt);
+        SpawnItem();
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameObject player = Instantiate(playerPrefab,startPoint.position, Quaternion.identity);
-        player.name = "Player";
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SpawnItem();
+        }
     }
 
-    void OnGUI()
-    {
-        GUI.color = Color.red;
-        GUI.Label(new Rect(125, 40, 200, 20), "Progress : " + _progress);
-        if(GUILayout.Button("Tutorial"))
-        {
-            SetProgress(Progress.Tutorial);
-        }
-        if(GUILayout.Button("First"))
-        {
-            SetProgress(Progress.First);
-        }
-        if(GUILayout.Button("Second"))
-        {
-            SetProgress(Progress.Second);
-        }
-        if(GUILayout.Button("Third"))
-        {
-            SetProgress(Progress.Third);
-        }
-        if(GUILayout.Button("Last"))
-        {
-            SetProgress(Progress.Last);
-        }
-    }
 }
