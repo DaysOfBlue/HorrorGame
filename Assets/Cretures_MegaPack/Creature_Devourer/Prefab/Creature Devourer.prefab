@@ -1507,6 +1507,7 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: e9a8e0359e141e646bb757f2da216c4d, type: 2}
+  - {fileID: 2100000, guid: 48f613e17941806459bc30d1d86cc39c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2383,8 +2384,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   moveSpeed: 2
-  speedWhenSeen: 2
-  speedWhenUnSeen: 1
+  speedWhenSeen: 2.5
+  speedWhenUnSeen: 1.5
   sightThreshold: 0.7
   playerSight: {fileID: 0}
   animSmoothTime: 0.1

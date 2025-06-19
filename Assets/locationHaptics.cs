@@ -75,7 +75,7 @@ public class locationHaptics : MonoBehaviour
     // 멀면 1.0(강함), 가까우면 0.0(약함)으로 선형 매핑
     private float MapDistanceToIntensity(float distance)
     {
-        distance = Mathf.Clamp(distance, minDistance, maxDistance) / 10;
+        distance = Mathf.Clamp(distance, minDistance, maxDistance) / 100;
         float t = Mathf.InverseLerp(minDistance, maxDistance, distance); // 가까울수록 t↓
         return 1f - t; // 멀수록 진동 ↑
     }

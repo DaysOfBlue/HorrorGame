@@ -27,6 +27,9 @@ public class Monster : MonoBehaviour
     private NavMeshAgent _agent;
     private Animator _animator;
 
+    private bool _canAttack = true;
+    private float _attackTimer = 0.0f;
+
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -53,12 +56,42 @@ public class Monster : MonoBehaviour
         
     }
 
+    void Attack()
+    {
+        if (_canAttack)
+        {
+            Debug.Log("Attack!");
+            PlayerRayShooter.Instance.GetDamage();
+            _canAttack = false;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (_player == null) return;
         Vector3 toEnemy = (transform.position - _player.transform.position).normalized;
+        float dist = Vector3.Distance(transform.position, _player.transform.position);
+        //Debug.Log(dist);
         float dot = Vector3.Dot(playerSight.transform.forward, toEnemy);
+
+        if (2.0f < dist && dist <= 5.0f)
+        {
+            PlayerRayShooter.Instance.playerStatus = PlayerStatus.Danger;
+            //Debug.Log("YESAH!");
+        }
+        else if (dist > 5.0f && dist < 8.0f)
+        {
+            PlayerRayShooter.Instance.playerStatus = PlayerStatus.Normal;
+        }
+        else if (dist >= 0.0f && dist <= 2.0f)
+        {
+            Attack();
+        }
+        else
+        {
+            PlayerRayShooter.Instance.playerStatus = PlayerStatus.Safe;
+        }
         
 
 
@@ -75,10 +108,12 @@ public class Monster : MonoBehaviour
         if (dot > sightThreshold)
         {
             _agent.speed = speedWhenSeen;
+            //PlayerRayShooter.Instance.playerStatus = PlayerStatus.Danger;
         }
         else
         {
             _agent.speed = speedWhenUnSeen;
+            //PlayerRayShooter.Instance.playerStatus = PlayerStatus.Safe;
         }
 
         _agent.SetDestination(_player.transform.position);
@@ -86,6 +121,17 @@ public class Monster : MonoBehaviour
         float currentSpeed = _agent.velocity.magnitude;
         _animator.SetFloat("Speed", currentSpeed, animSmoothTime, Time.deltaTime);
         _animator.SetBool("IsRunning", currentSpeed > 0.1f);
+
+        if (!_canAttack)
+        {
+            _attackTimer += Time.deltaTime;
+        }
+
+        if (_attackTimer >= 3.0f)
+        {
+            _canAttack = true;
+            _attackTimer = 0.0f;
+        }
 
     }
 
@@ -111,4 +157,5 @@ public class Monster : MonoBehaviour
         int index = Random.Range(0, stepSounds.Length);
         audioFootsteps.PlayOneShot(stepSounds[index]);
     }
+    
 }

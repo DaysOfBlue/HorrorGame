@@ -6,6 +6,9 @@ public class GameManager : Singleton<GameManager>
     public GameObject itemPrefab;
     public GameObject monsterPrefab;
     public Transform[] itemSpawnPoints;
+    public DangerBallShooter[] dangerBallShooters;
+    private float shootRate = 10.0f;
+    private float shootTimer = 0.0f;
     int itemCnt = 0;
 
     private int preIdx = 0;
@@ -24,6 +27,7 @@ public class GameManager : Singleton<GameManager>
         
         if (itemCnt == 2 || itemCnt == 4 || itemCnt == 6)
         {
+            shootRate -= 1.0f;
             idx = Random.Range(0, itemSpawnPoints.Length);
             if (preIdx == idx)
             {
@@ -35,6 +39,12 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void ShootDangerBall()
+    {
+        int idx = Random.Range(0, dangerBallShooters.Length);
+        dangerBallShooters[idx].StartShootSequence();
+    }
+
     public void AddItemCount(int input)
     {
         itemCnt += input;
@@ -44,15 +54,20 @@ public class GameManager : Singleton<GameManager>
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        SpawnItem();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (shootTimer >= shootRate)
         {
-            SpawnItem();
+            ShootDangerBall();
+            shootTimer = 0.0f;
+        }
+        else
+        {
+            shootTimer += Time.deltaTime;
         }
     }
 
