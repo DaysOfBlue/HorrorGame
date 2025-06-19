@@ -2,20 +2,19 @@ using UnityEngine;
 using Bhaptics.SDK2;
 using UnityEngine.XR.OpenXR.Input;
 
-public class PlayerHapticFeedback : MonoBehaviour
+public class PlayerHapticFeedback : Singleton<PlayerHapticFeedback>
 {
     public GameObject player;
-
     public GameObject soundSource;
 
     public string tactFileName = "SoundFeedback";
     private float _angle = 0.0f;
     
-    private void OnShoot(string bEvent)
+    public void OnShoot(string bEvent)
     {
         if (HapticFeedbackManager.Instance.IsHapticFeedbackActive())
         {
-            Vector3 directionToPlayer = player.transform.position - soundSource.transform.position;
+            Vector3 directionToPlayer = transform.position - soundSource.transform.position;
             _angle = Vector3.SignedAngle(soundSource.transform.forward, directionToPlayer, Vector3.up);
             Debug.Log(_angle);
             //BhapticsLibrary.Play(BhapticsEvent.GROWLING_LEFT);
@@ -25,6 +24,22 @@ public class PlayerHapticFeedback : MonoBehaviour
                 1.0f,
                 1.0f,
                 -_angle,
+                0.0f
+            );
+        }
+    }
+    public void OnShootByAngle(string bEvent, float angle)
+    {
+        if (HapticFeedbackManager.Instance.IsHapticFeedbackActive())
+        {
+            Vector3 directionToPlayer = transform.position - soundSource.transform.position;
+            //BhapticsLibrary.Play(BhapticsEvent.GROWLING_LEFT);
+            BhapticsLibrary.Play(
+                bEvent,
+                0,
+                1.0f,
+                1.0f,
+                -angle,
                 0.0f
             );
         }
