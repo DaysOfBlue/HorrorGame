@@ -20,10 +20,11 @@ public class locationHaptics : MonoBehaviour
     [Header("Raycast Settings")]
     [Tooltip("한 번의 스캔에서 쏘는 Ray 개수")]
     [Range(12, 360)] public int raysPerScan = 60;
-    [Tooltip("Ray 최대 거리(m)")] public float maxDistance = 12f;
+    [Tooltip("Ray 최대 거리(m)")] public float maxDistance = 5f;
     [Tooltip("스캔 주기(s)")] public float scanInterval = 0.25f;
     [Tooltip("Ray가 맞을 레이어")] public LayerMask obstructionLayers = ~0;
     public bool drawDebug = true;
+    public Transform sight;
 
     /* ---------- Haptic 파라미터 ---------- */
     [Header("Haptics")]
@@ -54,7 +55,7 @@ public class locationHaptics : MonoBehaviour
         for (int i = 0; i < raysPerScan; i++)
         {
             float yaw = i * step;
-            Vector3 dir = Quaternion.Euler(0f, yaw, 0f) * transform.forward;
+            Vector3 dir = Quaternion.Euler(0f, yaw, 0f) * sight.forward;
 
             if (Physics.Raycast(transform.position, dir, out RaycastHit hit,
                                 maxDistance, obstructionLayers, QueryTriggerInteraction.Ignore))
@@ -74,7 +75,7 @@ public class locationHaptics : MonoBehaviour
     // 멀면 1.0(강함), 가까우면 0.0(약함)으로 선형 매핑
     private float MapDistanceToIntensity(float distance)
     {
-        distance = Mathf.Clamp(distance, minDistance, maxDistance);
+        distance = Mathf.Clamp(distance, minDistance, maxDistance) / 10;
         float t = Mathf.InverseLerp(minDistance, maxDistance, distance); // 가까울수록 t↓
         return 1f - t; // 멀수록 진동 ↑
     }
@@ -82,11 +83,12 @@ public class locationHaptics : MonoBehaviour
     // bHaptics SDK2: BhapticsLibrary.PlayParam() 사용 (SDK 문서 참조) :contentReference[oaicite:0]{index=0}
     private void PlayHaptics(float angleDeg, float intensity)
     {
+        Debug.Log("intensity" + intensity + "/" + duration + "/" + angleDeg);
         BhapticsLibrary.PlayParam(
-            bhapticsEvent,          // 미리 정의한 이벤트
+            BhapticsEvent.FOOTSTEP,          // 미리 정의한 이벤트
             intensity,              // 0~1
             duration,               // 원본 이벤트 길이에 곱해짐
-            angleDeg,               // Vest 좌우 각도
+            - angleDeg,               // Vest 좌우 각도
             0f                      // offsetY: 위아래 이동(0이면 중앙)
         );
     }

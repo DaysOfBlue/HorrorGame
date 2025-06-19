@@ -12296,15 +12296,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raysPerScan: 60
-  maxDistance: 12
-  scanInterval: 0.25
+  maxDistance: 1
+  scanInterval: 0.5
   obstructionLayers:
     serializedVersion: 2
     m_Bits: 4294967295
   drawDebug: 1
+  sight: {fileID: 106179045}
   minDistance: 0.5
   bhapticsEvent: NAV_PULSE
-  duration: 1
+  duration: 0.5
 --- !u!1 &1211600382
 GameObject:
   m_ObjectHideFlags: 0
@@ -19336,8 +19337,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   moveSpeed: 1
-  speedWhenSeen: 1
-  speedWhenUnSeen: 0.5
+  speedWhenSeen: 2
+  speedWhenUnSeen: 1
   sightThreshold: 0.7
   playerSight: {fileID: 106179045}
   animSmoothTime: 0.1
